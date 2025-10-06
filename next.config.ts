@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Disable Turbopack for production builds to avoid LightningCSS issues
+  experimental: {
+    turbo: {
+      // Disable Turbopack for production
+      loaders: {}
+    }
+  },
   images: {
     remotePatterns: [
       {
