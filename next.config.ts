@@ -1,23 +1,35 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Disable LightningCSS to avoid native module issues
+  // Configure experimental features
   experimental: {
-    optimizePackageImports: ['lightningcss']
+    optimizePackageImports: ['lightningcss'],
+    // Disable CSS minification to avoid LightningCSS issues
+    optimizeCss: false,
+    // Ensure server components CSS optimization is disabled
+    serverComponentsExternalPackages: ['lightningcss']
   },
-  // Add Webpack configuration to disable LightningCSS
+  // Configure Webpack to handle CSS processing
   webpack: (config, { isServer }) => {
     // Exclude LightningCSS from Webpack processing
     config.resolve.alias = {
       ...config.resolve.alias,
       'lightningcss': false,
+      'lightningcss-linux-x64-gnu': false,
     };
     
-    // Exclude LightningCSS modules from being processed
-    config.externals = config.externals || [];
-    if (!Array.isArray(config.externals)) {
-      config.externals = [config.externals];
-    }
+    // Exclude LightningCSS from being processed
+    config.externals = [...(config.externals || []), 'lightningcss'];
+    
+    // Ensure CSS is processed with PostCSS instead of LightningCSS
+    config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'postcss-loader'
+      ]
+    });
     
     return config;
   },
