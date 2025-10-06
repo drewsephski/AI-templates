@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/react": "^1.2.12",
     "@clerk/nextjs": "^6.33.2",
     "@openrouter/ai-sdk-provider": "^1.2.0",
     "@radix-ui/react-separator": "^1.1.7",

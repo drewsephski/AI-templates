@@ -5,6 +5,22 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lightningcss']
   },
+  // Add Webpack configuration to disable LightningCSS
+  webpack: (config, { isServer }) => {
+    // Exclude LightningCSS from Webpack processing
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'lightningcss': false,
+    };
+    
+    // Exclude LightningCSS modules from being processed
+    config.externals = config.externals || [];
+    if (!Array.isArray(config.externals)) {
+      config.externals = [config.externals];
+    }
+    
+    return config;
+  },
   images: {
     remotePatterns: [
       {
