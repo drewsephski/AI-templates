@@ -9,13 +9,14 @@ import { Badge } from '@/components/ui/badge'
 import TemplateTabs from '@/components/templates/template-tabs'
 
 interface TemplateDetailPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export default function TemplateDetailPage({ params }: TemplateDetailPageProps) {
-  const template = getTemplateById(params.id)
+export default async function TemplateDetailPage({ params }: TemplateDetailPageProps) {
+  const { id } = await params
+  const template = getTemplateById(id)
   
   if (!template) {
     notFound()
